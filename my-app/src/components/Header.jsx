@@ -2,7 +2,9 @@ import headerImg from '../assets/homebg.jpg'
 
 const Header = () => {
   return (
- <div className='relative flex'>
+ <div className='relative flex h-screen w-full'>
+
+  
         <div style={{
             backgroundImage:`url(${headerImg})`,
             backgroundSize:'cover',
@@ -10,7 +12,7 @@ const Header = () => {
             backgroundRepeat:'no-repeat',
         
         }} 
-          className='h-screen w-full blur-[1px]'
+          className='h-full w-full blur-[1px]'
         >
          
         </div>

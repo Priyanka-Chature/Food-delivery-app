@@ -7,110 +7,86 @@ import menu5 from '../assets/menu_5.png'
 import menu6 from '../assets/menu_6.png'
 import menu7 from '../assets/menu_7.png'
 
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, FreeMode, A11y, Autoplay } from "swiper/modules";
+
+
 const ExploreMenu = () => {
 
-  const menu_list=[
-    {
-      id:1,
-      name:'salad',
-      img:menu1
-    },
-    {
-      id:2,
-      name:'pizza',
-      img:menu2
-    },
-    {
-      id:3,
-      name:'burger',
-      img:menu3
-    },
-    {
-      id:4,
-      name:'pasta',
-      img:menu4
-    },
-    {
-      id:5,
-      name:'dessert',
-      img:menu5
-    },
-    {
-      id:6,
-      name:'drinks',
-      img:menu6
-    },
-    {
-      id:7,
-      name:'seafood',
-      img:menu7
+  
+const menu_list = [
+    { id: 1, name: "salad", img: menu1 },
+    { id: 2, name: "pizza", img: menu2 },
+    { id: 3, name: "burger", img: menu3 },
+    { id: 4, name: "pasta", img: menu4 },
+    { id: 5, name: "dessert", img: menu5 },
+    { id: 6, name: "drinks", img: menu6 },
+    { id: 7, name: "seafood", img: menu7 },
+    { id: 8, name: "seafood", img: menu1 },
+  ];
 
-    },
-    {
-      id:8,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:9,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:10,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:11,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:12,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:13,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:14,
-      name:'seafood',
-      img:menu1
-
-    },
-    {
-      id:15,
-      name:'seafood',
-      img:menu1
-
-    }
-  ]
+   
+  
   return (
-    <div className='w-full px-44 mt-14 flex flex-col gap-3'>
+    <div className='w-full px-30 py-15 flex flex-col items-center gap-5'>
         <h1 className='text-[#262626] text-2xl font-bold '>Explore our menu</h1>
         <p className='max-w-[60%] text-[#808080] '>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis harum vero consectetur quae labore.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis harum vero consectetur quae labore.  </p>
-        <div className=' px-4 mx-auto flex items-center justify-between text-center gap-12 overflow-x-auto whitespace-nowrap w-full'>
-          {menu_list.map((item,index)=>{
-            return(
-            <div key={index} className='mt-6'>
-            <img src={item.img} alt='menu1' className='w-30 min-w-30 cursor-pointer border border-gray-400 rounded-full'></img>
-            <p className='mt-2.5 text-[#747474] text-base cursor-pointer '>{item.name}</p>
-          </div>
-            )
 
-          })}
-        </div>
-        <hr className='my-2.5 h-0.5 bg-[#ececec]'></hr>
+        
+<div className="w-full mt-4">
+        <Swiper
+          modules={[Pagination, FreeMode,Autoplay]}
+          // spacing between slides
+          spaceBetween={16}
+          // base slides per view
+          slidesPerView={3}
+          // free scroll feel
+          freeMode
+          
+// optional autoplay (remove if not needed)
+          autoplay={{ delay: 2000, pauseOnMouseEnter: true, disableOnInteraction: false }}
+          
+          // dots
+         
+pagination={{
+      clickable: true,
+    }}
+
+          // infinite loop
+          loop
+          
+          // responsive breakpoints
+          breakpoints={{
+            0: { slidesPerView: 2, spaceBetween: 12 },
+            640: { slidesPerView: 3, spaceBetween: 14 },
+            768: { slidesPerView: 4, spaceBetween: 16 },
+            1024: { slidesPerView: 5, spaceBetween: 18 },
+          }}
+          className="!px-4 pb-12"
+
+>
+          {menu_list.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div className="mt-6 flex flex-col items-center text-center">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="w-30 min-w-30 cursor-pointer border border-gray-400 rounded-full"
+                  loading="lazy"
+                />
+                <p className="mt-2.5 text-[#747474] text-base cursor-pointer">{item.name}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+          
+</Swiper>
+      </div>
+
+
+
+        
+        <div className="menu-pagination flex justify-center gap-2 mt-3"></div>
     </div>
   )
 }

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/free-mode";
+
+
 /* *{
     margin: 0;
     padding: 0;
@@ -14,5 +20,10 @@ body{
     /* background-color: rgb(196, 196, 120); */
 }
 
+
+.swiper-pagination {
+  position: static !important;
+  margin-top: 10px;
+}
 
 
