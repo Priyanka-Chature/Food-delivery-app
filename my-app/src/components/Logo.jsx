@@ -3,7 +3,7 @@ import logo from '../assets/logo.png'
 
 const Logo = () => (
   
-    <img src={logo} alt="Logo" className="h-full w-24" />
+    <img src={logo} alt="Logo" className="h-24 w-24" />
   
 );
 

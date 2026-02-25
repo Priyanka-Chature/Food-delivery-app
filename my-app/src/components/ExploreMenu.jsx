@@ -7,15 +7,12 @@ import menu5 from '../assets/menu_5.png'
 import menu6 from '../assets/menu_6.png'
 import menu7 from '../assets/menu_7.png'
 
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, FreeMode, A11y, Autoplay } from "swiper/modules";
 
+const ExploreMenu = ({ category, setCategory }) => {
 
-const ExploreMenu = () => {
-
-  
-const menu_list = [
+  const menu_list = [
     { id: 1, name: "salad", img: menu1 },
     { id: 2, name: "pizza", img: menu2 },
     { id: 3, name: "burger", img: menu3 },
@@ -26,36 +23,32 @@ const menu_list = [
     { id: 8, name: "seafood", img: menu1 },
   ];
 
-   
-  
-  return (
-    <div className='w-full px-30 py-15 flex flex-col items-center gap-5'>
-        <h1 className='text-[#262626] text-2xl font-bold '>Explore our menu</h1>
-        <p className='max-w-[60%] text-[#808080] '>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis harum vero consectetur quae labore.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis harum vero consectetur quae labore.  </p>
+  const handleClick = (name) => {
+    setCategory((prev) => (prev === name ? "All" : name));
+  }
 
-        
-<div className="w-full mt-4">
+  return (
+    <div className='w-full px-30 py-8 flex flex-col items-center gap-5'>
+      <h1 className='text-[#262626] text-2xl font-bold '>Explore our menu</h1>
+      <p className='max-w-[60%] text-[#808080] '>Chooose from a diverse menu featuring a delectable array of dishes . Our mission is to satisfy your craving and elevate your dining experience, one delicious meal at a time. </p>
+
+      <div className="w-full mt-4">
         <Swiper
-          modules={[Pagination, FreeMode,Autoplay]}
+          modules={[Pagination, FreeMode, Autoplay]}
           // spacing between slides
           spaceBetween={16}
           // base slides per view
           slidesPerView={3}
           // free scroll feel
           freeMode
-          
-// optional autoplay (remove if not needed)
+          // optional autoplay (remove if not needed)
           autoplay={{ delay: 2000, pauseOnMouseEnter: true, disableOnInteraction: false }}
-          
           // dots
-         
-pagination={{
-      clickable: true,
-    }}
-
+          pagination={{
+            clickable: true,
+          }}
           // infinite loop
           loop
-          
           // responsive breakpoints
           breakpoints={{
             0: { slidesPerView: 2, spaceBetween: 12 },
@@ -63,32 +56,34 @@ pagination={{
             768: { slidesPerView: 4, spaceBetween: 16 },
             1024: { slidesPerView: 5, spaceBetween: 18 },
           }}
-          className="!px-4 pb-12"
-
->
-          {menu_list.map((item) => (
-            <SwiperSlide key={item.id}>
-              <div className="mt-6 flex flex-col items-center text-center">
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  className="w-30 min-w-30 cursor-pointer border border-gray-400 rounded-full"
-                  loading="lazy"
-                />
-                <p className="mt-2.5 text-[#747474] text-base cursor-pointer">{item.name}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-          
-</Swiper>
+          className="px-4! pb-12"
+        >
+          {menu_list.map((item) => {
+            const isActive = category === item.name;
+            return (
+              <SwiperSlide onClick={() => handleClick(item.name)} key={item.id}>
+                <div className="mt-6 flex flex-col items-center text-center">
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    loading="lazy"
+                    className={`w-30 min-w-30 cursor-pointer  rounded-full shadow-2xl 
+                    ${isActive ? "border-orange-500 ring-2 ring-orange-500 p-0.5" : ""}`}
+                  />
+                  <p
+                    className={`mt-2.5 text-[#747474] text-base cursor-pointer
+                    ${isActive ? "text-orange-600 font-semibold" : "text-[#747474]"}`}
+                  >
+                    {item.name}
+                  </p>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </div>
-
-
-
-        
-        <div className="menu-pagination flex justify-center gap-2 mt-3"></div>
     </div>
-  )
-}
+  );
+};
 
 export default ExploreMenu

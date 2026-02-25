@@ -1,9 +1,13 @@
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import searchIcon from '../assets/search_icon.png'
 import cart from '../assets/basket_icon.png'
 
 const Navbar = () => {
+
+  const navigate= useNavigate();
+
   return (
     <nav className="h-20 px-6 w-full bg-[#eeeeee] flex items-center justify-between shadow sticky top-0 z-50">
       {/* Logo Section */}
@@ -35,7 +39,7 @@ const Navbar = () => {
         <div className="">
           <img src={cart} alt="Cart Icon" className="h-4 w-4" />
         </div>
-        <button className="px-5 py-1.5 text-sm font-medium text-black border-2 border-amber-600 rounded-xl  outline-none">Login</button>
+        <button onClick={() => navigate("/login")} className="px-5 py-1.5 text-sm font-medium text-black border-2 border-amber-600 rounded-xl  outline-none">Login</button>
       </div>
     </nav>
   );

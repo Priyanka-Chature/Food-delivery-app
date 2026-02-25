@@ -18,7 +18,7 @@ const Header = () => {
         </div>
         <div className='absolute top-1/2 left-1/2 -translate-y-1/2 px-10 mx-3'>
             <h2 className='font-bold text-white text-5xl leading-16'>Order your favourite food here</h2>
-            <p className='text-white leading-8 my-8'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente non repellendus provident totam Sapiente non repellendus provident totam  </p>
+            <p className='text-white leading-8 my-8'>Chooose from a diverse menu featuring a delectable array of dishes . Our mission is to satisfy your craving and elevate your dining experience, one delicious meal at a time.</p>
             <button className='px-6 py-2.5 bg-white border-none text-m rounded-4xl'>View Menu</button>
         </div>
        </div>
