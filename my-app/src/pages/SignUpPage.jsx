@@ -5,6 +5,7 @@ import Logo from "../components/Logo";
  * Signup form with fixed-height inline error messages (no layout shift).
  * Uses Tailwind's `invisible` to hide error line when there's no message.
  */
+
 export default function Signup() {
   const navigate = useNavigate();
 
@@ -186,4 +187,3 @@ export default function Signup() {
     </div>
   );
 }
-``

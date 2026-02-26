@@ -39,7 +39,7 @@ const Navbar = () => {
         <div className="">
           <img src={cart} alt="Cart Icon" className="h-4 w-4" />
         </div>
-        <button onClick={() => navigate("/login")} className="px-5 py-1.5 text-sm font-medium text-black border-2 border-amber-600 rounded-xl  outline-none">Login</button>
+        <button onClick={() => navigate("/login")} className="px-5 py-1.5 text-sm font-medium text-black border-2 border-amber-600 rounded-xl  outline-none cursor-pointer">Login</button>
       </div>
     </nav>
   );
