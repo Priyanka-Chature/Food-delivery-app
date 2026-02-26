@@ -34,10 +34,10 @@ const Navbar = () => {
       {/* Search, Cart, and Login Section */}
       <div className="h-full flex items-center justify-center flex-1 gap-14">
         <div className="">
-          <img src={searchIcon} alt="Search Icon" className="h-4 w-4" />
+          <img src={searchIcon} alt="Search Icon" className="h-4 w-4 cursor-pointer" />
         </div>
         <div className="">
-          <img src={cart} alt="Cart Icon" className="h-4 w-4" />
+          <img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" />
         </div>
         <button onClick={() => navigate("/login")} className="px-5 py-1.5 text-sm font-medium text-black border-2 border-amber-600 rounded-xl  outline-none cursor-pointer">Login</button>
       </div>

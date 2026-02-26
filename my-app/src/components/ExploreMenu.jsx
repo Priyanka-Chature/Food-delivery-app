@@ -1,27 +1,8 @@
-import React from 'react'
-import menu1 from '../assets/menu_1.png'
-import menu2 from '../assets/menu_2.png'
-import menu3 from '../assets/menu_3.png'
-import menu4 from '../assets/menu_4.png'
-import menu5 from '../assets/menu_5.png'
-import menu6 from '../assets/menu_6.png'
-import menu7 from '../assets/menu_7.png'
-
+import { menu_list } from "../assets/assets"; 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, FreeMode, A11y, Autoplay } from "swiper/modules";
 
 const ExploreMenu = ({ category, setCategory }) => {
-
-  const menu_list = [
-    { id: 1, name: "salad", img: menu1 },
-    { id: 2, name: "pizza", img: menu2 },
-    { id: 3, name: "burger", img: menu3 },
-    { id: 4, name: "pasta", img: menu4 },
-    { id: 5, name: "dessert", img: menu5 },
-    { id: 6, name: "drinks", img: menu6 },
-    { id: 7, name: "seafood", img: menu7 },
-    { id: 8, name: "seafood", img: menu1 },
-  ];
 
   const handleClick = (name) => {
     setCategory((prev) => (prev === name ? "All" : name));
@@ -59,13 +40,13 @@ const ExploreMenu = ({ category, setCategory }) => {
           className="px-4! pb-12"
         >
           {menu_list.map((item) => {
-            const isActive = category === item.name;
+            const isActive = category === item.menu_name;
             return (
-              <SwiperSlide onClick={() => handleClick(item.name)} key={item.id}>
+              <SwiperSlide onClick={() => handleClick(item.menu_name)} key={item.id}>
                 <div className="mt-6 flex flex-col items-center text-center">
                   <img
-                    src={item.img}
-                    alt={item.name}
+                    src={item.menu_img}
+                    alt={item.menu_name}
                     loading="lazy"
                     className={`w-30 min-w-30 cursor-pointer  rounded-full shadow-2xl 
                     ${isActive ? "border-orange-500 ring-2 ring-orange-500 p-0.5" : ""}`}
@@ -74,7 +55,7 @@ const ExploreMenu = ({ category, setCategory }) => {
                     className={`mt-2.5 text-[#747474] text-base cursor-pointer
                     ${isActive ? "text-orange-600 font-semibold" : "text-[#747474]"}`}
                   >
-                    {item.name}
+                    {item.menu_name}
                   </p>
                 </div>
               </SwiperSlide>

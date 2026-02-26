@@ -24,7 +24,8 @@ const App = () => {
       <Route path='/orders' element={<PlaceOrder/>}/>
       <Route path='/login' element={<LoginPage/>}/>
       <Route path='/signup' element={<SignUpPage/>}/>
-      <Route path="*" element={<div className="p-8">Not Found</div>}/> 
+      <Route path="*" element={<div className="p-8">Not Found</div>}/>
+       
 
 
       

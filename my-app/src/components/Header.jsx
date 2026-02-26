@@ -1,4 +1,4 @@
-import headerImg from '../assets/homebg.jpg'
+import {assets} from '../assets/assets'
 
 const Header = () => {
   return (
@@ -6,10 +6,11 @@ const Header = () => {
 
   
         <div style={{
-            backgroundImage:`url(${headerImg})`,
+            backgroundImage:`url(${assets.homebg})`,
             backgroundSize:'cover',
             backgroundPosition:'center',
             backgroundRepeat:'no-repeat',
+
         
         }} 
           className='h-full w-full blur-[1px]'
