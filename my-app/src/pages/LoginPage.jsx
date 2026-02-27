@@ -35,38 +35,31 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] grid place-items-center p-4">
-      {/* Card with image + form (matches your layout) */}
-      <div className="w-full max-w-5xl bg-white shadow-xl rounded-2xl border border-gray-200 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <main className="min-h-[calc(100vh-5rem)] grid place-items-center p-4 sm:p-6 lg:p-8">
+      {/* Card with image + form */}
+      <div className="w-full max-w-5xl bg-white shadow-xl rounded-2xl border border-gray-200 p-4 sm:p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Left: Image */}
           <div className="rounded-xl overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1600&auto=format&fit=crop"
               alt="Burger"
-              className="w-full h-70 md:h-full object-cover"
+              className="w-full h-56 sm:h-64 md:h-full object-cover"
             />
           </div>
 
           {/* Right: Form */}
-          <div>
+          <div className="px-1 sm:px-2">
             {/* Brand */}
-            {/* <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-orange-500 text-white grid place-items-center font-bold">≡</div>
-              <h1 className="text-2xl font-extrabold text-orange-500">FoodDesk.</h1>
-            </div> */}
             <div className="w-full grid place-items-center">
-        <Logo/>
-
-        </div>
+              <Logo />
+            </div>
 
             {/* Title */}
-            <div className="">
-              <h2 className="text-sm text-center font-semibold text-gray-900">Create an Account</h2>
-              {/* <div className="flex items-center gap-3 mt-1">
-                <span className="text-sm text-gray-500">Sign Up</span>
-                <span className="flex-1 h-px bg-gray-200" />
-              </div> */}
+            <div className="mt-2 sm:mt-3">
+              <h2 className="text-base sm:text-lg text-center font-semibold text-gray-900">
+                Create an Account
+              </h2>
             </div>
 
             {/* Global error */}
@@ -77,7 +70,7 @@ export default function LoginPage() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className="mt-5 sm:mt-6 space-y-4" noValidate>
               {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -139,7 +132,7 @@ export default function LoginPage() {
             </form>
 
             {/* Divider */}
-            <div className="my-5">
+            <div className="my-4 sm:my-5">
               <div className="flex items-center gap-3">
                 <span className="flex-1 h-px bg-gray-200" />
                 <span className="text-sm text-gray-500">Continue With</span>
@@ -147,18 +140,18 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Social row (visual only) + small promo image */}
+            {/* Social row (visual only) */}
             <div className="grid place-items-center">
-              
-              <button type="button" className="col-span-1 px-6 rounded-lg border border-gray-300 h-11 text-sm hover:bg-gray-50">
+              <button
+                type="button"
+                className="col-span-1 px-6 rounded-lg border border-gray-300 h-10 sm:h-11 text-sm hover:bg-gray-50"
+              >
                 Google
               </button>
-              
-              
             </div>
 
             {/* Link to Signup */}
-            <div className="mt-6 text-center text-sm text-gray-600">
+            <div className="mt-5 sm:mt-6 text-center text-sm text-gray-600">
               Don't have an account?{" "}
               <Link to="/signup" className="text-orange-600 font-medium hover:underline">
                 Sign up

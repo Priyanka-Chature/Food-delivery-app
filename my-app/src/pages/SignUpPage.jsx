@@ -60,8 +60,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDEFE6] flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-orange-100 p-8 md:p-10">
+    <div className="min-h-screen bg-[#FDEFE6] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-orange-100 p-6 md:p-8 lg:p-10">
         {/* Brand */}
         {/* <div className="flex items-center justify-center gap-2">
           <div className="h-9 w-9 rounded-full bg-orange-500 text-white grid place-items-center font-bold">
@@ -70,13 +70,12 @@ export default function Signup() {
           <span className="text-2xl font-extrabold text-orange-500">FoodDesk.</span>
         </div> */}
         <div className="w-full grid place-items-center">
-        <Logo/>
-
+          <Logo />
         </div>
 
-        <p className="text-center text-gray-700 font-medium">Sign up your account</p>
+        <p className="text-center text-gray-700 font-medium text-sm sm:text-base">Sign up your account</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+        <form onSubmit={handleSubmit} className="mt-5 sm:mt-6 space-y-4" noValidate>
           {/* Username */}
           <div>
             <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
@@ -176,14 +175,13 @@ export default function Signup() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 sm:mt-5 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link to="/login" className="text-orange-600 font-medium hover:underline">
             Sign in
           </Link>
         </p>
       </div>
-
     </div>
   );
 }
