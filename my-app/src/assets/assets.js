@@ -134,7 +134,7 @@ export const menu_list = [
     { id: 2, menu_name: "Rolls", menu_img: menu_2 },
     { id: 3, menu_name: "Desert", menu_img: menu_3 },
     { id: 4, menu_name: "Sandwich", menu_img: menu_4 },
-    { id: 5, menu_name: "cake", menu_img: menu_5 },
+    { id: 5, menu_name: "Cake", menu_img: menu_5 },
     { id: 6, menu_name: "Pure Veg", menu_img: menu_6 },
     { id: 7, menu_name: "Pasta", menu_img: menu_7 },
     { id: 8, menu_name: "Noodles", menu_img: menu_8 },

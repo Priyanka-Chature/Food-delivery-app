@@ -8,11 +8,12 @@ import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import { Routes, Route } from 'react-router-dom';
 import SignUpPage from './pages/SignUpPage';
+import Footer from './components/Footer';
 
 
 const App = () => {
   return (
-
+<>
     <div>
         <Navbar/>
 
@@ -31,9 +32,9 @@ const App = () => {
       
     </Routes>
     </div> 
+    <Footer/>
     
-    
-    
+    </>
     
   )
 }

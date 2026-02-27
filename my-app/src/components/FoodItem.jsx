@@ -1,25 +1,29 @@
-import React, { useState } from 'react'
+import React, { useContext} from 'react'
 import { assets } from '../assets/assets'
+import { StoreContext } from '../Context/StoreContext'
 
 const FoodItem = ({ id, name, price, description, image }) => {
+    
+    
 
-    const[itemCount , setItemcount] = useState(0);
+    const{cartItems,addToCart,removeFromCart} = useContext(StoreContext);
 
     return (
-        <div className="w-full h-full rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="w-full h-full rounded-2xl shadow-2xl overflow-hidden flex flex-col cursor-pointer">
 
-            <div className="w-full">
+            <div className="w-full relative">
                 <img
                     src={image}
                     alt={name}
                     className="w-full h-50 object-cover rounded-t-xl" // consistent image area
                 />
                 
-                    {!itemCount?<img className='' onClick={() => setItemcount(prev =>prev+1)} src={assets.add_icon_white} alt=""/>:
-                    <div>
-                        <img onClick={() => setItemcount(prev =>prev-1)} src={assets.remove_icon_red} alt=""/>
-                        <p>{itemCount}</p>
-                        <img onClick={() => setItemcount(prev =>prev+1)} src={assets.add_icon_green} alt=""/>
+                    {!cartItems[id] ? 
+                    <img className='absolute w-9 bottom-4 right-4 cursor-pointer rounded-full' onClick={() => addToCart(id)} src={assets.add_icon_white} alt=""/>:
+                    <div className='absolute bottom-4 right-4 flex items-center gap-2.5 p-1.5 rounded-full bg-white'>
+                        <img onClick={() => removeFromCart(id)} src={assets.remove_icon_red} alt="" className='w-7'/>
+                        <p>{cartItems[id]}</p>
+                        <img onClick={() => addToCart(id)} src={assets.add_icon_green} alt="" className='w-7'/>
                     </div>
 }
             </div>
@@ -38,10 +42,12 @@ const FoodItem = ({ id, name, price, description, image }) => {
                 <p className="text-[#747474] text-sm line-clamp-3">
                     {description}
                 </p>
+                
+                
 
 
 
-                <p className="text-amber-600 text-xl font-medium mt-auto pt-3">
+                <p className="text-amber-600 text-lg font-medium mt-auto pt-3">
                     ${price}
                 </p>
             </div>
