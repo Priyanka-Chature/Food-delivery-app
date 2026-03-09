@@ -1,16 +1,20 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import Menu from './pages/Menu'
 import Footer from './components/Footer'
-import Featured from './components/Featured'
+import { Route, Routes } from 'react-router-dom'
+
 
 const App = () => {
   return (
     <>
     <Navbar/>
-    <Home/>
-    <Featured/>
-    <Footer/>
+    <Routes>
+      <Route path='/' element={<Home/>}/>
+      <Route path='/menu' element={<Menu/>}/>
+    </Routes>
+    
     </>
   )
 }

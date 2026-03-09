@@ -1,8 +1,12 @@
 import React from 'react'   
+// import { CarouselCrossfadeExample } from '../components/Carousel'
+import Featured from '../components/Featured'
+import '../index.css'
 
 const Home = () => {
   return (
-    <div>
+    <>
+    <div className='w-full h-full bg-red-400'>
 
       {/* Carousel */}
       {/* <div>
@@ -11,7 +15,7 @@ const Home = () => {
       
 
       {/* Hero Section */}
-      <section style={{ padding: '2rem', textAlign: 'center', background: '#f8f8f8' }}>
+      <section style={{ padding: '2rem', textAlign: 'center' }}>
         <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Welcome to DineIn Restaurant</h1>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>Oder food, takeaway or book a table - at your fingertip </h2>
         <p style={{ fontSize: '1.2rem', color: '#555' }}>
@@ -40,7 +44,12 @@ const Home = () => {
           <li>Give Us A Chance to Serve...:)</li>
         </ul>
       </section>
+      
     </div>
+    
+      <Featured/>
+    </>
+    
   )
 }
 

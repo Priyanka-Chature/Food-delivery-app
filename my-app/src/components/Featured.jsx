@@ -3,7 +3,7 @@ import React from 'react';
 const featuredItems = [
   {
     title: 'Chef Special Pizza',
-    description: 'A delicious pizza with fresh ingredients and a secret sauce.',
+    description: 'A delicious pizza with fresh ingredients.',
     image: '/src/asset/5903724.jpg',
   },
   {
@@ -19,18 +19,21 @@ const featuredItems = [
 ];
 
 const Featured = () => {
-  return (
-    <div className="flex flex-col gap-6 items-center py-8">
-      {featuredItems.map((item, idx) => (
-        <div key={idx} className="w-80 bg-gradient-to-br from-blue-100 to-blue-300 shadow-lg rounded-xl border border-blue-200 flex flex-col items-center p-6">
-          <div className="w-32 h-20 rounded-lg overflow-hidden shadow mb-3 flex items-center justify-center bg-white">
-            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-          </div>
-          <h3 className="text-xl font-bold mb-2 text-blue-900 text-center">{item.title}</h3>
-          <p className="text-gray-700 text-base text-center mb-2">{item.description}</p>
-        </div>
-      ))}
+  return ( 
+  <div className='w-full justify-around h-2/4 bg-red-500 align-center items-center'>
+    <h1 className='items-center text-lg text-center'>Featured Taste</h1>
+    <div className='flex items-center justify-center gap-6'>
+      {featuredItems.map((item, index) => (
+        <div key={index} className='w-1/3 rounded-sm shadow-lg bg-white justify-center items-center flex flex-col gap-2 mt-8 pt-8'>
+          <img src={item.image} alt={item.title} className='w-[50%] h-[50%] object-cover rounded-sm mt-12 pt-8' />
+          <h2 className='text-xl font-bold mb-2 text-wrap text-center'>{item.title}</h2>
+          <p className='text-gray-700 mb-8 text-wrap text-center'>{item.description}</p>
+        </div>)
+      )}
+      
+
     </div>
+  </div>
   );
 };
 
