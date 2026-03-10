@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../components/Logo';
 import searchIcon from '../assets/search_icon.png';
 import cart from '../assets/basket_icon.png';
@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="h-20 w-full bg-[#eeeeee] flex items-center justify-between shadow sticky top-0 z-50 px-4 sm:px-6 lg:px-10">
       {/* Left: Logo */}
       <div className="h-full w-[25%] sm:w-[20%] lg:w-[15%] flex justify-start sm:justify-center items-center">
-        <Logo />
+        <Link to="/"><Logo/></Link>
       </div>
 
       {/* Center: Desktop Nav */}
@@ -56,13 +56,13 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/orders"
+              to="/contact"
               className={({ isActive }) =>
                 `no-underline font-medium transition-colors duration-300 cursor-pointer 
                  ${isActive ? 'text-[#b34700]' : 'text-[#d65804]'}`
               }
             >
-              Orders
+              Contact Us
             </NavLink>
           </li>
         </ul>
@@ -75,7 +75,7 @@ const Navbar = () => {
           <img src={searchIcon} alt="Search Icon" className="h-4 w-4 cursor-pointer" />
         </div>
         <div>
-          <img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" />
+          <Link to="/cart"><img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" /></Link>
         </div>
 
         {/* Desktop Login */}

@@ -44,7 +44,7 @@ const ExploreMenu = ({ category, setCategory }) => {
             1024: { slidesPerView: 5,   spaceBetween: 18 },
             1280: { slidesPerView: 6,   spaceBetween: 20 },
           }}
-          className="!pb-10"
+          className="pb-10!"
         >
           {menu_list.map((item) => {
             const isActive = category === item.menu_name;

@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import {assets} from '../assets/assets'
 
 const Header = () => {
+
+   const navigate = useNavigate();
   return (
     <div className="relative flex w-full min-h-svh lg:min-h-screen">
       <div
@@ -20,12 +23,13 @@ const Header = () => {
         </h2>
 
         {/* Paragraph: narrow width & adjusted leading on small screens */}
-        <p className="text-white mt-3 sm:mt-4 lg:mt-6 text-[0.95rem] sm:text-base lg:text-[1.05rem] leading-6 sm:leading-7 lg:leading-7 mx-auto sm:mx-0 max-w-[36rem] opacity-95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]">
-          Chooose from a diverse menu featuring a delectable array of dishes. Our mission is to satisfy your craving and elevate your dining experience, one delicious meal at a time.
+        <p className="text-white mt-3 sm:mt-4 lg:mt-6 text-[0.95rem] sm:text-base lg:text-[1.05rem] leading-6 sm:leading-7 lg:leading-7 mx-auto sm:mx-0 max-w-xl opacity-95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]">
+          Choose from a diverse menu featuring a delectable array of dishes. Our mission is to satisfy your craving and elevate your dining experience, one delicious meal at a time.
         </p>
 
         {/* Button: scales a bit so it feels click/tap friendly */}
-        <button className="mt-4 sm:mt-6 px-5 sm:px-6 lg:px-7 py-2 sm:py-2.5 bg-white border-none text-sm sm:text-base rounded-3xl shadow-sm hover:shadow transition">
+        <button  onClick={() => navigate('/menu')}
+        className="mt-4 sm:mt-6 px-5 sm:px-6 lg:px-7 py-2 sm:py-2.5 bg-white border-none text-sm sm:text-base rounded-3xl shadow-sm hover:shadow transition cursor-pointer">
           View Menu
         </button>
       </div>
