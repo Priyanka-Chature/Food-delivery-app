@@ -40,7 +40,7 @@ const About = () => {
               alt="Restaurant food collage"
               className="w-full rounded-2xl shadow-lg ring-1 ring-slate-200 object-cover"
             />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-black/0 to-black/0 group-hover:to-black/10 transition" />
+            <div className="absolute inset-0 rounded-2xl bg-linear-to-tr from-black/0 to-black/0 group-hover:to-black/10 transition" />
           </div>
         </div>
       </section>
@@ -149,11 +149,7 @@ const About = () => {
       </section>
 
       {/* Footer blurb */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
-        <p className="text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} FreshBite. Made with ❤️ for food lovers.
-        </p>
-      </section>
+     
     </main>
   );
 };

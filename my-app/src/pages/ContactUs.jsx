@@ -207,8 +207,8 @@ const Contact = () => {
               </p>
               <p className="text-slate-700">
                 <span className="font-semibold">Email:</span>{" "}
-                <a className="text-amber-700 hover:underline" href="mailto:hello@freshbite.in">
-                  hello@freshbite.in
+                <a className="text-amber-700 hover:underline" href="mailto:contact@foodypaws.com">
+                  contact@foodypaws.com
                 </a>
               </p>
               <p className="text-slate-700">
