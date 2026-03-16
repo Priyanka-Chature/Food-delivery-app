@@ -165,7 +165,7 @@ const Contact = () => {
                 name="message"
                 value={form.message}
                 onChange={handleChange}
-                className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2 text-sm min-h-[120px]"
+                className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2 text-sm min-h-30"
                 placeholder="Tell us a bit more…"
                 required
               />

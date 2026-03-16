@@ -2,7 +2,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-800">
+    <main className="min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-100 text-slate-800">
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
