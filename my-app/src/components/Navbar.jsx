@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { StoreContext } from "../Context/StoreContext";
 import Logo from '../components/Logo';
 import searchIcon from '../assets/search_icon.png';
 import cart from '../assets/basket_icon.png';
@@ -8,6 +9,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const { cartCount } = useContext(StoreContext);
+
   // Close menu when a route is selected
   const closeMenu = () => setOpen(false);
 
@@ -15,7 +18,7 @@ const Navbar = () => {
     <nav className="h-20 w-full bg-[#eeeeee] flex items-center justify-between shadow sticky top-0 z-50 px-4 sm:px-6 lg:px-10">
       {/* Left: Logo */}
       <div className="h-full w-[25%] sm:w-[20%] lg:w-[15%] flex justify-start sm:justify-center items-center">
-        <Link to="/"><Logo/></Link>
+        <Link to="/"><Logo /></Link>
       </div>
 
       {/* Center: Desktop Nav */}
@@ -74,9 +77,21 @@ const Navbar = () => {
         <div>
           <img src={searchIcon} alt="Search Icon" className="h-4 w-4 cursor-pointer" />
         </div>
-        <div>
-          <Link to="/cart"><img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" /></Link>
-        </div>
+        <div className="relative">
+  <Link to="/cart">
+    <img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" />
+    {cartCount > 0 && (
+      <span
+        className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center"
+      >
+        {cartCount}
+      </span>
+    )}
+  </Link>
+</div>
+
+       
+
 
         {/* Desktop Login */}
         <button

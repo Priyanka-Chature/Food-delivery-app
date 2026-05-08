@@ -1,55 +1,118 @@
 import { createContext, useEffect, useState } from "react";
-import {food_list} from '../assets/assets';
+import axios from "axios";
 
 export const StoreContext = createContext(null);
 
-const StoreContextProvider =(props) =>{
+const StoreContextProvider = (props) => {
+  const [food_list, setFoodList] = useState([]);
+  const [cartItems, setCartItems] = useState({});
+  const [cartCount, setCartCount] = useState(0);
+  const userId = 1; // Replace with actual logged-in user id
 
-    const[cartItems , setCartItems] = useState({});
+  // Fetch food items from backend
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/menu")
+      .then(response => setFoodList(response.data))
+      .catch(error => console.error("Error fetching food list:", error));
+  }, []);
 
-    const addToCart = (itemId) =>{
-        if(!cartItems[itemId]){
-            setCartItems((prev) =>({...prev,[itemId]:1}))
+   useEffect(() => {
+  refreshCartCount();
+}, []);
+
+
+  // Fetch cart items from backend
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/cart/${userId}`)
+      .then(response => {
+        const cartMap = {};
+        response.data.forEach(item => {
+          cartMap[item.menuItem.id] = item.quantity;
+        });
+        setCartItems(cartMap);
+      })
+      .catch(error => console.error("Error fetching cart:", error));
+  }, []);
+
+ 
+
+  const refreshCart = async () => {
+    const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
+    const cartMap = {};
+    res.data.forEach(item => {
+      cartMap[item.menuItem.id] = item.quantity;
+    });
+    setCartItems(cartMap);
+  };
+
+  const addToCart = async (itemId) => {
+    await axios.post(`http://localhost:8080/api/cart/add?userId=${userId}&menuItemId=${itemId}&quantity=1`);
+    await refreshCart();
+    await refreshCartCount();
+  };
+
+  const removeFromCart = async (itemId) => {
+    await axios.delete(`http://localhost:8080/api/cart/remove?userId=${userId}&menuItemId=${itemId}`);
+    await refreshCart();
+    await refreshCartCount();
+  };
+
+  const removeAllFromCart = async (itemId) => {
+  await axios.delete(`http://localhost:8080/api/cart/removeAll?userId=${userId}&menuItemId=${itemId}`);
+  await refreshCart();
+  await refreshCartCount();
+};
+
+
+  const clearCart = async () => {
+    await axios.delete(`http://localhost:8080/api/cart/clear/${userId}`);
+    await refreshCart();
+    await refreshCartCount();
+  };
+
+  const getTotalCartAmount = () => {
+    let totalAmount = 0;
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
+        let itemInfo = food_list.find((product) => product.id === parseInt(item));
+        if (itemInfo) {
+          totalAmount += itemInfo.price * cartItems[item];
         }
-        else{
-            setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
-        }
-
+      }
     }
+    return totalAmount;
+  };
 
-    const removeFromCart = (itemId) =>{
-      setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))  
-    }
+  const refreshCartCount = async () => {
+  try {
+    const res = await axios.get(`http://localhost:8080/api/cart/${userId}/count`);
+    // If backend returns { "count": 3 }
+    setCartCount(res.data.count);
+   
+  } catch (error) {
+    console.error("Error fetching cart count:", error);
+  }
+};
 
-    const getTotalCartAmount =() =>{
-        let totalAmount = 0;
 
-        for(const item in cartItems){
 
-            if (cartItems[item] > 0){
-            let itemInfo = food_list.find((product) => product._id === item );
-            totalAmount += itemInfo.price * cartItems[item];
-            }
-        }
-        return totalAmount;
-    }
 
-    
-    
-    const contextValue = {
-        food_list,
-        cartItems,
-        setCartItems,
-        addToCart,
-        removeFromCart,
-        getTotalCartAmount
-    }
+  const contextValue = {
+    food_list,
+    cartItems,
+    cartCount,
+    addToCart,
+    removeFromCart,
+    removeAllFromCart,
+    clearCart,
+    getTotalCartAmount,
+  };
 
-    return(
-        <StoreContext.Provider value={contextValue}>
-            {props.children}
-        </StoreContext.Provider>    
-    )
-}
+  return (
+    <StoreContext.Provider value={contextValue}>
+      {props.children}
+    </StoreContext.Provider>
+  );
+};
 
 export default StoreContextProvider;

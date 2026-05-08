@@ -50,10 +50,29 @@ export default function Signup() {
 
     setSubmitting(true);
     try {
-      // TODO: Replace with your API call
-      await new Promise((r) => setTimeout(r, 600));
+      const response = await fetch("http://localhost:8080/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.username,
+        email: form.email,
+        password: form.password,
+      }),
+      });
+ 
+      if (!response.ok) {
+       let data = {};
+      try {
+        data = await response.json();
+      } catch {}
+      throw new Error(data.message || "Registration failed");
+    }
       // On success go to login
       navigate("/login");
+    } catch (err) {
+    // Show error at the top (optional: add a global error state)
+    setErrors((prev) => ({ ...prev, global: err.message }));
+
     } finally {
       setSubmitting(false);
     }

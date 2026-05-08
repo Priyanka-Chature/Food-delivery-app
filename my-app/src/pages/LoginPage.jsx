@@ -24,14 +24,29 @@ export default function LoginPage() {
     setError("");
 
     // TODO: Replace with your API call
-    await new Promise((r) => setTimeout(r, 500));
-    const ok = form.email === "demo@example.com" && form.password === "password123";
+   try {
+    const response = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+      }),
+    });
 
-    if (ok) {
-      navigate("/"); // go to home after login
-    } else {
-      setError("Invalid email or password");
+    if (!response.ok) {
+      throw new Error("Invalid email or password");
     }
+
+     const data = await response.json();
+
+     navigate("/");
+
+     } catch (err) {
+    setError(err.message);
+  }
+
+    
   };
 
   return (
@@ -58,7 +73,7 @@ export default function LoginPage() {
             {/* Title */}
             <div className="mt-2 sm:mt-3">
               <h2 className="text-base sm:text-lg text-center font-semibold text-gray-900">
-                Create an Account
+                Login
               </h2>
             </div>
 

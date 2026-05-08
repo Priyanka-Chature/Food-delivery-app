@@ -1,12 +1,24 @@
-import { menu_list } from "../assets/assets";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, FreeMode, A11y, Autoplay } from "swiper/modules";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const ExploreMenu = ({ category, setCategory }) => {
+  const [menuList, setMenuList] = useState([]);
+
+  useEffect(() =>{
+    axios.get("http://localhost:8080/api/menu/categories")
+    .then(res => setMenuList(res.data))
+    .catch(err => setMenuList([]));
+  }, []);
+
 
   const handleClick = (name) => {
     setCategory((prev) => (prev === name ? "All" : name));
   }
+
+
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center gap-4 sm:gap-5">
@@ -33,7 +45,7 @@ const ExploreMenu = ({ category, setCategory }) => {
             clickable: true,
           }}
           // infinite loop
-          loop
+          loop={menuList.length > 4}
           // responsive breakpoints
           breakpoints={{
             0:    { slidesPerView: 2,   spaceBetween: 10 },
@@ -46,13 +58,13 @@ const ExploreMenu = ({ category, setCategory }) => {
           }}
           className="pb-10!"
         >
-          {menu_list.map((item) => {
+          {menuList.map((item) => {
             const isActive = category === item.menu_name;
             return (
               <SwiperSlide onClick={() => handleClick(item.menu_name)} key={item.id}>
                 <div className="mt-6 flex flex-col items-center text-center">
                   <img
-                    src={item.menu_img}
+                    src={`http://localhost:8080${item.menu_img}`} 
                     alt={item.menu_name}
                     loading="lazy"
                     className={`h-16 w-16 sm:h-24 sm:w-24 md:h-28 md:w-28 cursor-pointer rounded-full shadow-2xl 

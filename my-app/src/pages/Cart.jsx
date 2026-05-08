@@ -6,8 +6,11 @@ const Cart = () => {
   const {
     cartItems,
     food_list,
+    cartCount,
     addToCart,
     removeFromCart,
+    removeAllFromCart,
+    clearCart,
     getTotalCartAmount,
   } = useContext(StoreContext);
 
@@ -15,7 +18,7 @@ const Cart = () => {
 
 
   // Cart Empty Check
-  const isEmpty = Object.values(cartItems).every((q) => q === 0);
+  const isEmpty = cartCount === 0;
 
   return (
     <div className="min-h-screen w-full bg-linear-to-b from-slate-50 via-white to-slate-100">
@@ -49,20 +52,20 @@ const Cart = () => {
             <div className="rounded-2xl bg-white p-4 sm:p-5 shadow-sm ring-1 ring-slate-200">
               <ul className="divide-y divide-slate-100">
                 {food_list.map((item) => {
-                  const qty = cartItems[item._id] || 0;
+                  const qty = cartItems[item.id] || 0;
                   if (qty === 0) return null;
 
                   return (
                     <li
-                      key={item._id}
+                      key={item.id}
                       className="flex flex-col sm:flex-row sm:items-center py-4 gap-4"
                     >
                       {/* IMAGE */}
                       <div className="h-24 w-full sm:w-28 overflow-hidden rounded-xl bg-slate-100">
-                        {item.image ? (
+                        {item.imageUrl ? (
                           <img
-                            src={item.image}
-                            alt={item.name}
+                            src={`http://localhost:8080${item.imageUrl}`}
+                             alt={item.name} 
                             className="w-full h-full object-cover "
                           />
                         ) : (
@@ -87,7 +90,7 @@ const Cart = () => {
                         <div className="mt-3 flex flex-col sm:flex-row sm:justify-between gap-3">
                           <div className="inline-flex items-center gap-3 bg-white border border-slate-200 px-3 py-1.5 rounded-full">
                             <button
-                              onClick={() => removeFromCart(item._id)}
+                              onClick={() => removeFromCart(item.id)}
                               className="h-7 w-7 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200"
                             >
                               −
@@ -98,7 +101,7 @@ const Cart = () => {
                             </span>
 
                             <button
-                              onClick={() => addToCart(item._id)}
+                              onClick={() => addToCart(item.id)}
                               className="h-7 w-7 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200"
                             >
                               +
@@ -107,9 +110,7 @@ const Cart = () => {
 
                           {/* REMOVE ALL */}
                           <button
-                            onClick={() => {
-                              for (let i = 0; i < qty; i++) removeFromCart(item._id);
-                            }}
+                            onClick={() => removeAllFromCart(item.id)}
                             className="text-xs bg-rose-50 text-rose-600 font-medium px-5 py-1 rounded-full ring-1 ring-rose-200 hover:bg-rose-100"
                           >
                             Remove
@@ -133,10 +134,19 @@ const Cart = () => {
                 <span className="text-sm text-slate-500">
                   Items in cart:{" "}
                   <strong className="text-slate-900">
-                    {food_list.filter((i) => cartItems[i._id] > 0).length}
+                    {cartCount}
                   </strong>
                 </span>
               </div>
+              <div className="mt-4 flex justify-end">
+  <button
+    onClick={clearCart}
+    className="text-xs bg-amber-600 text-white font-medium px-3.5 py-2 rounded-full"
+  >
+    Clear Cart
+  </button>
+</div>
+
             </div>
           )}
         </section>
@@ -169,7 +179,7 @@ const Cart = () => {
             
 
             <button onClick={() => navigate('/order')}
-              disabled={isEmpty}
+              disabled={cartCount === 0}
               className={`mt-5 w-full rounded-full px-5 py-3 text-sm font-semibold text-white ${
                 isEmpty
                   ? "bg-slate-300 cursor-not-allowed"
