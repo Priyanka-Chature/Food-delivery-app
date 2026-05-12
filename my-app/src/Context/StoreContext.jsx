@@ -5,10 +5,12 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [food_list, setFoodList] = useState([]);
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  const userId = 7; // Replace with actual logged-in user id
+  const userId = 8; // Replace with actual logged-in user id
 
+
+  
   // Fetch food items from backend
   useEffect(() => {
     axios.get("http://localhost:8080/api/menu")

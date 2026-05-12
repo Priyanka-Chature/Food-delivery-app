@@ -11,6 +11,7 @@ import SignUpPage from './pages/SignUpPage';
 import Footer from './components/Footer';
 import Payment from './pages/Payment';
 import ContactUs from './pages/ContactUs';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 
 const App = () => {
@@ -30,6 +31,8 @@ const App = () => {
       <Route path='/signup' element={<SignUpPage/>}/>
        <Route path='/cart' element={<Cart/>}/>
        <Route path='/payment' element={<Payment/>}/>
+       <Route path="/orderConfirmation" element={<OrderConfirmation />} />
+
       <Route path="*" element={<div className="p-8">Not Found</div>}/>
        
 

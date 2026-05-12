@@ -66,11 +66,18 @@ const OrderSummary = ({ promoCode,
 
             {showActionButton && (
                 <button
-                    onClick={() => navigate(actionPath)}
+                    onClick={() => {
+                        if (typeof actionPath === "function") {
+                            actionPath();   // ✅ call the handler function
+                        } else {
+                            navigate(actionPath); // fallback if it's a string
+                        }
+                    }}
+
                     disabled={disabled || isEmpty}
                     className={`mt-5 w-full rounded-full px-5 py-3 text-sm font-semibold text-white ${disabled || isEmpty
-                            ? "bg-slate-300 cursor-not-allowed"
-                            : "bg-amber-600 hover:bg-amber-700"
+                        ? "bg-slate-300 cursor-not-allowed"
+                        : "bg-amber-600 hover:bg-amber-700"
                         }`}
                 >
                     {actionLabel}

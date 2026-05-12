@@ -2,11 +2,14 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { StoreContext } from "../Context/StoreContext";
 import OrderSummary from "../components/OrderSummary";
+import { useNavigate } from "react-router-dom";
 
 import AddAddressModal from "../components/AddAddressModal";
 
 const PlaceOrder = ({ promoCode }) => {
   // const { getCartSummary } = useContext(StoreContext);
+  const { cartItems } = useContext(StoreContext);
+
 
   const [addressAdded, setAddressAdded] = useState(false);
 
@@ -18,18 +21,23 @@ const PlaceOrder = ({ promoCode }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [editAddress, setEditAddress] = useState(null);
 
+ const navigate = useNavigate();
 
 
 useEffect(() => {
   const fetchAddresses = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/user/7/addresses");
+       const token = localStorage.getItem("token"); // 🔥 Added
+        const res = await axios.get("http://localhost:8080/api/user/8/addresses", {
+          headers: { Authorization: token } // 🔥 Added
+        });
+
       const data = res.data;
       setAddresses(data);
       if (data.length === 0) {
         setShowForm(true); // new user → show form
       } else {
-        setSelectedAddress(data.find(a => a.isDefault) || data[0]);
+        setSelectedAddress(data[0]);
       }
     } catch (err) {
       console.error("Failed to fetch addresses", err);
@@ -52,14 +60,16 @@ useEffect(() => {
 
  const saveEditedAddress = async (formData) => {
     try {
+       const token = localStorage.getItem("token"); // 🔥 Added
       const res = await axios.put(
-        `http://localhost:8080/api/user/7/addresses/${editAddress.id}`,
+        `http://localhost:8080/api/user/8/addresses/${editAddress.id}`,
         formData,
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Content-Type": "application/json", Authorization: token } } // 🔥 Added
       );
+
       const updated = res.data;
 
-      console.log("Address updated successfully:", updated);
+      // console.log("Address updated successfully:", updated);
 
       // Replace old address in state with backend response
       setAddresses(prev => prev.map(a => a.id === updated.id ? updated : a));
@@ -73,7 +83,12 @@ useEffect(() => {
 
 const handleDeleteAddress = async (id) => {
   try {
-    await axios.delete(`http://localhost:8080/api/user/7/addresses/${id}`);
+     const token = localStorage.getItem("token"); // 🔥 Added
+      await axios.delete(`http://localhost:8080/api/user/8/addresses/${id}`, {
+        headers: { Authorization: token } // 🔥 Added
+      });
+
+    
     setAddresses(prev => prev.filter(a => a.id !== id));
     if (selectedAddress?.id === id) {
       setSelectedAddress(null);
@@ -81,6 +96,43 @@ const handleDeleteAddress = async (id) => {
     }
   } catch (err) {
     console.error("Failed to delete address", err);
+  }
+};
+
+
+// ✅ Create order and go to payment
+const handlePlaceOrder = async () => {
+  // console.log("Cart items at checkout:", cartItems);
+
+  // Convert {2:1, 3:1} → [{menuItemId:2, quantity:1}, {menuItemId:3, quantity:1}]
+  const itemsArray = Object.entries(cartItems).map(([menuItemId, quantity]) => ({
+    menuItemId: Number(menuItemId), // convert key string → number
+    quantity
+  }));
+
+  if (itemsArray.length === 0) {
+    alert("Your cart is empty");
+    return;
+  }
+
+  try {
+    const payload = {
+      addressId: selectedAddress.id,
+      items: itemsArray
+    };
+
+    console.log("Payload being sent:", payload);
+ const token = localStorage.getItem("token");
+    const res = await axios.post("http://localhost:8080/api/orders", payload, {
+        headers: { "Content-Type": "application/json", Authorization: token } // 🔥 Added
+      });
+
+    console.log("Order created:", res.data);
+    navigate("/payment", { state: { orderId: res.data.id, order: res.data } });
+
+  } catch (err) {
+    console.error("Failed to create order", err);
+    alert("Order creation failed");
   }
 };
 
@@ -204,7 +256,7 @@ const handleDeleteAddress = async (id) => {
             promoCode={promoCode}
             showActionButton={true}
             actionLabel="PROCEED TO PAYMENT"
-            actionPath="/payment"
+            actionPath={handlePlaceOrder}
             disabled={!addressAdded} // only enabled after address is added/selected
           />
 

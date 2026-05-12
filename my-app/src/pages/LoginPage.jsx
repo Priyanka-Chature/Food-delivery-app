@@ -24,29 +24,30 @@ export default function LoginPage() {
     setError("");
 
     // TODO: Replace with your API call
-   try {
-    const response = await fetch("http://localhost:8080/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: form.email,
-        password: form.password,
-      }),
-    });
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error("Invalid email or password");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid email or password");
+      }
+      localStorage.setItem("token", `${data.tokenType} ${data.token}`);
+
+
+      navigate("/");
+
+    } catch (err) {
+      setError(err.message);
     }
 
-     const data = await response.json();
 
-     navigate("/");
-
-     } catch (err) {
-    setError(err.message);
-  }
-
-    
   };
 
   return (

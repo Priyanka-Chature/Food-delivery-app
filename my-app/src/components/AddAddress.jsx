@@ -57,24 +57,29 @@ const handleChange = (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    try {
+       try {
       if (initialData && initialData.id) {
-        // Editing → just pass data up
-        onSave(form);
-      } else {
-        // Adding new address → POST
-        const res = await axios.post(
-          "http://localhost:8080/api/user/7/addresses",
+        // Editing → PUT request
+        const res = await axios.put(
+          `http://localhost:8080/api/user/8/addresses/${initialData.id}`,
           form,
           { headers: { "Content-Type": "application/json" } }
         );
-        onSave(res.data);
-        console.log(res.data);
+        onSave(res.data); // AddressResponse from backend
+      } else {
+        // Adding new → POST request
+        const res = await axios.post(
+          "http://localhost:8080/api/user/8/addresses",
+          form,
+          { headers: { "Content-Type": "application/json" } }
+        );
+        onSave(res.data); // AddressResponse from backend
       }
     } catch (err) {
       console.error("Failed to save address", err);
     }
   };
+
 
 
 

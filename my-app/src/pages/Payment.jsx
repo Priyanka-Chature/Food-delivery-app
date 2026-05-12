@@ -1,17 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate,useLocation } from "react-router-dom";
+import axios from "axios";
 import OrderSummary from "../components/OrderSummary";
 
-const Payment = ({ selectedAddress, promoCode }) => {
+const Payment = ({ promoCode }) => {
+  const location = useLocation();
+  const orderId = location.state?.orderId;
+  const initialOrder = location.state?.order;
+
+  // ✅ Use initialOrder if passed from PlaceOrder
+  const [order, setOrder] = useState(initialOrder || null);
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  const handlePayment = () => {
-    if (!paymentMethod) {
-      alert("Please select a payment method");
-      return;
-    }
-    console.log("Proceeding with payment via:", paymentMethod);
-    alert("Payment successful!");
-  };
+const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`http://localhost:8080/api/orders/${orderId}`, {
+          headers: { Authorization: token }
+        });
+        setOrder(res.data);
+      } catch (err) {
+        console.error("Failed to fetch order", err);
+      }
+    };
+    // ✅ Only fetch if we don’t already have the order from PlaceOrder
+    if (orderId && !order) fetchOrder();
+  }, [orderId, order]);
+
+  const handlePayment = async () => {
+  if (!paymentMethod) {
+    alert("Please select a payment method");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    // Step 1: Initiate payment
+    const res = await axios.post("http://localhost:8080/api/payments/initiate", {
+      orderId,
+      method: paymentMethod,
+    }, {
+      headers: { Authorization: token }
+    });
+
+    const paymentId = res.data.paymentId;
+
+    alert("Redirecting to payment gateway...");
+
+    // Simulate gateway success after delay
+    setTimeout(async () => {
+      const confirmRes = await axios.post("http://localhost:8080/api/payments/confirm", {
+        orderId,
+        paymentId,
+        success: true, // simulate success
+      }, {
+        headers: { Authorization: token }
+      });
+
+      console.log("Payment confirmed:", confirmRes.data);
+
+      // Update UI with confirmed order
+      setOrder(confirmRes.data);
+
+      alert("Payment successful! Your order has been placed.");
+      // Optionally redirect to confirmation page
+      navigate("/orderConfirmation", { state: { order: confirmRes.data } });
+    }, 2000);
+
+  } catch (err) {
+    console.error("Payment failed", err);
+    alert("Payment failed!");
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -28,75 +93,75 @@ const Payment = ({ selectedAddress, promoCode }) => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 px-4 py-6 sm:px-6">
-        {/* LEFT: Payment Details */}
-        <section className="space-y-6">
-          {/* Address */}
-          <div className="bg-white rounded-xl shadow-sm p-5">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-900 mb-3">Delivering To</h2>
-            {selectedAddress ? (
-              <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
-                <p className="font-medium">{selectedAddress.fullName}</p>
-                <p className="text-sm text-slate-600">
-                  {selectedAddress.address1}
-                  {selectedAddress.address2 && `, ${selectedAddress.address2}`}<br />
-                  {selectedAddress.city}, {selectedAddress.state} - {selectedAddress.pin}
-                </p>
-                <p className="text-sm text-slate-600">📞 {selectedAddress.mobile}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-red-600">No address selected</p>
-            )}
-          </div>
-
-          {/* Payment Methods */}
-          <div className="bg-white rounded-xl shadow-sm p-5">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-900 mb-3">Choose Payment Method</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {[
-                { label: "Card", icon: "💳" },
-                { label: "UPI", icon: "📱" },
-                { label: "Netbanking", icon: "🏦" },
-                { label: "Wallet", icon: "👛" },
-                { label: "Cash on Delivery", icon: "💵" },
-              ].map(method => (
-                <button
-                  key={method.label}
-                  onClick={() => setPaymentMethod(method.label)}
-                  className={`flex flex-col items-center justify-center gap-2 rounded-lg border px-4 py-6 text-sm sm:text-base font-medium transition
-                    ${paymentMethod === method.label
-                      ? "border-green-600 bg-green-50 text-green-700"
-                      : "border-slate-200 hover:bg-slate-50 text-slate-700"}`}
-                >
-                  <span className="text-2xl">{method.icon}</span>
-                  {method.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* RIGHT: Order Summary */}
-        <aside className="lg:sticky lg:top-6">
-          <OrderSummary promoCode={promoCode} showActionButton={false} />
-        </aside>
-      </main>
-
-      {/* Sticky Bottom Bar */}
-      <footer className="sticky bottom-0 bg-white border-t border-slate-200 shadow-md">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-sm sm:text-base text-slate-700">
-            Selected: <span className="font-semibold">{paymentMethod || "None"}</span>
+    <main className="flex-1 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 px-4 py-6 sm:px-6">
+  {/* LEFT: Payment Details */}
+  <section className="space-y-6">
+    {/* Address */}
+    <div className="bg-white rounded-xl shadow-sm p-5">
+      <h2 className="text-sm sm:text-lg font-semibold text-slate-900 mb-3">Delivering To</h2>
+      {order?.address ? (
+        <div className="rounded-lg border border-amber-200 p-4 bg-slate-50">
+          <p className="font-medium">{order.address.fullName}</p>
+          <p className="text-xs sm:text-sm text-slate-600">
+            {order.address.address1}
+            {order.address.address2 && `, ${order.address.address2}`}<br />
+            {order.address.city}, {order.address.state} - {order.address.pin}
           </p>
-          <button
-            onClick={handlePayment}
-            className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition disabled:opacity-50"
-            disabled={!paymentMethod}
-          >
-            Pay Now
-          </button>
+          <p className="text-xs sm:text-sm text-slate-600">📞 {order.address.mobile}</p>
         </div>
-      </footer>
+      ) : (
+        <p className="text-sm text-red-600">No address found</p>
+      )}
+    </div>
+
+    {/* Payment Methods */}
+    <div className="bg-white rounded-xl shadow-sm p-5">
+      <h2 className="text-sm sm:text-lg font-semibold text-slate-900 mb-3">Choose Payment Method</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {[
+          { label: "Card", icon: "💳" },
+          { label: "UPI", icon: "📱" },
+          { label: "Netbanking", icon: "🏦" },
+          { label: "Wallet", icon: "👛" },
+          { label: "Cash on Delivery", icon: "💵" },
+        ].map(method => (
+          <button
+            key={method.label}
+            onClick={() => setPaymentMethod(method.label)}
+            className={`flex flex-col items-center justify-center gap-2 rounded-lg border px-4 py-6 text-xs sm:text-base font-medium transition w-full
+              ${paymentMethod === method.label
+                ? "border-green-600 bg-green-50 text-green-700"
+                : "border-slate-200 hover:bg-slate-50 text-slate-700"}`}
+          >
+            <span className="text-xl sm:text-2xl">{method.icon}</span>
+            {method.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* RIGHT: Order Summary */}
+  <aside className="lg:sticky lg:top-6">
+    <OrderSummary promoCode={promoCode} showActionButton={false} />
+  </aside>
+</main>
+
+{/* Sticky Bottom Bar */}
+<footer className="sticky bottom-0 bg-white border-t border-slate-200 shadow-md">
+  <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p className="text-xs sm:text-base text-slate-700">
+      Selected: <span className="font-semibold">{paymentMethod || "None"}</span>
+    </p>
+    <button
+      onClick={handlePayment}
+      className="w-full sm:w-auto px-6 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition disabled:opacity-50"
+      disabled={!paymentMethod}
+    >
+      Pay Now
+    </button>
+  </div>
+</footer>
     </div>
   );
 };
