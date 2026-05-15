@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import Payment from './pages/Payment';
 import ContactUs from './pages/ContactUs';
 import OrderConfirmation from './pages/OrderConfirmation';
+import ProfilePage from './pages/ProfilePage'; 
 import PrivateRoute from './components/PrivateRoute';
 
 
@@ -32,6 +33,7 @@ const App = () => {
 
           {/* Protected routes */}
 
+          <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
           <Route path='/cart' element={<PrivateRoute><Cart /></PrivateRoute>} />
           <Route path='/order' element={<PrivateRoute><PlaceOrder /></PrivateRoute>} />
           <Route path='/payment' element={<PrivateRoute><Payment /></PrivateRoute>} />

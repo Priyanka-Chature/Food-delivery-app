@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
+import axios from "axios";
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ const Contact = () => {
   });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ loading: false, success: "", error: "" });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,19 +41,25 @@ const Contact = () => {
     try {
       setStatus({ loading: true, success: "", error: "" });
 
-      // TODO: Replace with your API
-      // Example: await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      const response = await axios.post("http://localhost:8080/api/contact", form);
 
-      // Simulate network latency
-      await new Promise((r) => setTimeout(r, 900));
+      // 3. Handle Success (MessageResponse from backend)
+      setStatus({
+        loading: false,
+        success: response.data.message || "Thanks! We’ve received your message.",
+        error: ""
+      });
 
-      setStatus({ loading: false, success: "Thanks! We’ve received your message.", error: "" });
+      // Reset form
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+
     } catch (err) {
+      // 4. Handle Errors (Validation or Server errors)
+      const backendError = err.response?.data?.message || "Something went wrong. Please try again.";
       setStatus({
         loading: false,
         success: "",
-        error: "Something went wrong. Please try again or use the contact info.",
+        error: backendError,
       });
     }
   };
@@ -202,7 +210,7 @@ const Contact = () => {
               <p className="text-slate-700">
                 <span className="font-semibold">Phone:</span>{" "}
                 <a className="text-amber-700 hover:underline" href="tel:+919876543210">
-                  +91 98765 43210
+                  +91 9860842351
                 </a>
               </p>
               <p className="text-slate-700">
@@ -217,15 +225,15 @@ const Contact = () => {
 
               <div className="pt-2 flex flex-wrap gap-2">
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/919860842351?text=Hii%20FoodyPaws!"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700"
+                  className="inline-flex items-center rounded-full  bg-[#25D366] px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700"
                 >
                   WhatsApp
                 </a>
                 <a
-                  href="https://maps.google.com/?q=FreshBite%20Chennai"
+                  href="https://www.google.com/maps/dir/?api=1&destination=12.9996,80.2337"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-slate-300 text-slate-700 hover:bg-slate-50"

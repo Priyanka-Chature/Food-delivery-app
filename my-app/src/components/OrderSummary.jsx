@@ -53,17 +53,6 @@ const OrderSummary = ({ promoCode,
                 </div>
             </div>
 
-            {/* Checkout button */}
-            {/* <button
-        onClick={() => navigate("/order")}
-        disabled={isEmpty}
-        className={`mt-5 w-full rounded-full px-5 py-3 text-sm font-semibold text-white ${
-          isEmpty ? "bg-slate-300 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-        }`}
-      >
-        PROCEED TO CHECKOUT
-      </button> */}
-
             {showActionButton && (
                 <button
                     onClick={() => {

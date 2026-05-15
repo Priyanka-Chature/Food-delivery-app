@@ -5,11 +5,12 @@ import Logo from '../components/Logo';
 import searchIcon from '../assets/search_icon.png';
 import cart from '../assets/basket_icon.png';
 
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { cartCount, user, logout } = useContext(StoreContext);
+  const { cartCount, user, authLoading } = useContext(StoreContext);
 
   // Close menu when a route is selected
   const closeMenu = () => setOpen(false);
@@ -78,36 +79,41 @@ const Navbar = () => {
           <img src={searchIcon} alt="Search Icon" className="h-4 w-4 cursor-pointer" />
         </div>
         <div className="relative">
-  <Link to="/cart">
-    <img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" />
-    {cartCount > 0 && (
-      <span
-        className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center"
-      >
-        {cartCount}
-      </span>
-    )}
-  </Link>
-</div>
-
-       
+          <Link to="/cart">
+            <img src={cart} alt="Cart Icon" className="h-4 w-4 cursor-pointer" />
+            {cartCount > 0 && (
+              <span
+                className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs font-medium rounded-full h-4 w-4 flex items-center justify-center"
+              >
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        </div>
 
 
-       {/* Desktop Login/Logout */}
-        {user ? (
-          <button
-            onClick={() => { logout(); navigate('/login'); }}
-            className="hidden sm:inline-block px-4 sm:px-5 md:px-6 py-1.5 text-xs sm:text-sm font-medium text-black border-2 border-amber-600 rounded-xl outline-none cursor-pointer"
-          >
-            Logout
-          </button>
-        ) : (
-          <button
-            onClick={() => navigate('/login')}
-            className="hidden sm:inline-block px-4 sm:px-5 md:px-6 py-1.5 text-xs sm:text-sm font-medium text-black border-2 border-amber-600 rounded-xl outline-none cursor-pointer"
-          >
-            Login
-          </button>
+
+
+        {/* Desktop Login/Logout */}
+        {!authLoading && (
+          user ? (
+            <Link to="/profile" className="hidden sm:block">
+              <img
+                src="http://localhost:8080/images/profile_icon.png" // ⭐ Use user’s profile image or fallback
+                alt="Profile"
+                className="w-7 h-7 rounded-full object-contain cursor-pointer border border-gray-300"
+
+              />
+            </Link>
+
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="hidden sm:inline-block px-4 sm:px-5 md:px-6 py-1.5 text-xs sm:text-sm font-medium text-black border-2 border-amber-600 rounded-xl outline-none cursor-pointer"
+            >
+              Login
+            </button>
+          )
         )}
 
 
@@ -188,26 +194,32 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/orders"
+              to="/contact"
               onClick={closeMenu}
               className={({ isActive }) =>
                 `block px-2 py-2 rounded-lg no-underline transition-colors 
                  ${isActive ? 'text-[#b34700] bg-[#fff3e9]' : 'text-[#d65804] hover:bg-[#eeeeee]'}`
               }
             >
-              Orders
+              Contacts
             </NavLink>
           </li>
 
           {/* Mobile Login (inside drawer) */}
           <li className="pt-2">
-           {user ? (
-              <button
-                onClick={() => { closeMenu(); logout(); navigate('/login'); }}
-                className="w-full px-5 py-2 text-sm font-medium text-black border-2 border-amber-600 rounded-xl"
-              >
-                Logout
-              </button>
+            {!authLoading && (
+              user ? (
+              <Link to="/profile" onClick={closeMenu} className="w-full flex items-center justify-center gap-2 px-5 py-2 text-sm font-medium text-black border-2 border-amber-600 rounded-xl">
+                <img
+                  src="http://localhost:8080/images/profile_icon.png"
+                  alt="Profile"
+                  className="w-6 h-6 rounded-full object-contain border border-gray-300"
+                />
+                Profile
+              </Link>
+
+              // If you prefer logout instead of profile:
+              // <button onClick={() => { closeMenu(); logout(); navigate('/login'); }} className="w-full px-5 py-2 text-sm font-medium text-black border-2 border-amber-600 rounded-xl">Logout</button>
             ) : (
               <button
                 onClick={() => { closeMenu(); navigate('/login'); }}
@@ -215,7 +227,8 @@ const Navbar = () => {
               >
                 Login
               </button>
-            )}
+            )
+          )}
 
           </li>
         </ul>

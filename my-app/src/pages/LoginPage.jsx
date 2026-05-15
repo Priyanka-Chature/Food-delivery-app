@@ -1,8 +1,9 @@
-import {useContext} from 'react';
+import { useContext } from 'react';
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
 import { StoreContext } from "../Context/StoreContext";
+import axios from 'axios';
 
 
 const LoginPage = () => {
@@ -24,23 +25,16 @@ const LoginPage = () => {
 
     // TODO: Replace with your API call
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
+      const response = await axios.post("http://localhost:8080/api/auth/login", {
+        email: form.email,
+        password: form.password,
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Invalid email or password");
-      }
-      else {
-        console.log("Login successful, received token:", data);
-      }
-      localStorage.setItem("token", `${data.tokenType} ${data.token}`);
+      const data = response.data;
+      console.log("Login successful, received token:", data);
+
+      const storage = form.remember ? localStorage : sessionStorage;
+      storage.setItem("token", `${data.tokenType} ${data.token}`);
 
       setUser({
         id: data.userId,
@@ -48,9 +42,12 @@ const LoginPage = () => {
         email: data.email,
       });
 
+      //🔥 Zomato-style: clear guest cart instead of merging
+      localStorage.removeItem("guestCart");
+  
       navigate("/"); // redirect after login
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Login failed");
     }
 
   };
@@ -139,7 +136,7 @@ const LoginPage = () => {
                   className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                 />
                 <label htmlFor="remember" className="text-sm text-gray-700">
-                  Remember my preference
+                  Remember me
                 </label>
               </div>
 
@@ -160,16 +157,6 @@ const LoginPage = () => {
                 <span className="flex-1 h-px bg-gray-200" />
               </div>
             </div>
-
-            {/* Social row (visual only) */}
-            {/* <div className="grid place-items-center">
-              <button
-                type="button"
-                className="col-span-1 px-6 rounded-lg border border-gray-300 h-10 sm:h-11 text-sm hover:bg-gray-50"
-              >
-                Google
-              </button>
-            </div> */}
 
             {/* Link to Signup */}
             <div className="mt-5 sm:mt-6 text-center text-sm text-gray-600">

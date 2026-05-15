@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import AddAddressModal from "../components/AddAddressModal";
 
 const PlaceOrder = ({ promoCode }) => {
-  
-  const { cartItems } = useContext(StoreContext);
+
+  const { cartItems, getToken } = useContext(StoreContext);
   const [addressAdded, setAddressAdded] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -21,7 +21,9 @@ const PlaceOrder = ({ promoCode }) => {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const token = localStorage.getItem("token"); // 🔥 Added
+        const token = getToken();
+        if (!token) return;
+
         const res = await axios.get("http://localhost:8080/api/user/addresses", {
           headers: { Authorization: token } // 🔥 Added
         });
@@ -38,7 +40,7 @@ const PlaceOrder = ({ promoCode }) => {
       }
     };
     fetchAddresses();
-  }, []);
+  }, [getToken]);
 
 
   // ✅ Add new address
@@ -51,7 +53,9 @@ const PlaceOrder = ({ promoCode }) => {
 
   const saveEditedAddress = async (formData) => {
     try {
-      const token = localStorage.getItem("token"); // 🔥 Added
+      const token = getToken();
+      if (!token) return;
+
       const res = await axios.put(
         `http://localhost:8080/api/user/addresses/${editAddress.id}`,
         formData,
@@ -59,9 +63,7 @@ const PlaceOrder = ({ promoCode }) => {
       );
 
       const updated = res.data;
-
       // console.log("Address updated successfully:", updated);
-
       // Replace old address in state with backend response
       setAddresses(prev => prev.map(a => a.id === updated.id ? updated : a));
       setSelectedAddress(updated);
@@ -74,11 +76,12 @@ const PlaceOrder = ({ promoCode }) => {
 
   const handleDeleteAddress = async (id) => {
     try {
-      const token = localStorage.getItem("token"); // 🔥 Added
+      const token = getToken();
+      if (!token) return;
+
       await axios.delete(`http://localhost:8080/api/user/addresses/${id}`, {
         headers: { Authorization: token } // 🔥 Added
       });
-
 
       setAddresses(prev => prev.filter(a => a.id !== id));
       if (selectedAddress?.id === id) {
@@ -109,11 +112,14 @@ const PlaceOrder = ({ promoCode }) => {
     try {
       const payload = {
         addressId: selectedAddress.id,
-        items: itemsArray
+        items: itemsArray,
+        //promocode
       };
 
+
       console.log("Payload being sent:", payload);
-      const token = localStorage.getItem("token");
+      const token = getToken();
+      if (!token) return;
       const res = await axios.post("http://localhost:8080/api/orders", payload, {
         headers: { "Content-Type": "application/json", Authorization: token } // 🔥 Added
       });
@@ -126,14 +132,6 @@ const PlaceOrder = ({ promoCode }) => {
       alert("Order creation failed");
     }
   };
-
-
-
-
-
-
-
-
 
 
   return (
@@ -170,8 +168,6 @@ const PlaceOrder = ({ promoCode }) => {
                   onSave={saveEditedAddress}
                 />
               )}
-
-
 
               <div className="space-y-4">
                 {addresses.map(addr => (

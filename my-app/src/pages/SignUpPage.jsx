@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../components/Logo";
-/**
- * Signup form with fixed-height inline error messages (no layout shift).
- * Uses Tailwind's `invisible` to hide error line when there's no message.
- */
+import axios from "axios";
+
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -44,35 +42,26 @@ export default function Signup() {
     return !Object.values(next).some(Boolean);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setSubmitting(true);
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      const response = await axios.post("http://localhost:8080/api/auth/register", {
         name: form.username,
         email: form.email,
         password: form.password,
-      }),
       });
- 
-      if (!response.ok) {
-       let data = {};
-      try {
-        data = await response.json();
-      } catch {}
-      throw new Error(data.message || "Registration failed");
-    }
-      // On success go to login
+      console.log(response.data);
+      // Axios automatically throws for non-2xx responses, so if we’re here, it succeeded
       navigate("/login");
     } catch (err) {
-    // Show error at the top (optional: add a global error state)
-    setErrors((prev) => ({ ...prev, global: err.message }));
-
+      // Axios error handling
+      const errorMessage =
+        err.response?.data?.message || "Registration failed";
+      setErrors((prev) => ({ ...prev, global: errorMessage }));
     } finally {
       setSubmitting(false);
     }

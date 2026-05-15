@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { StoreContext } from "../Context/StoreContext";
+
 
 
 const AddAddress = ({ initialData, onSave }) => {
@@ -17,7 +19,7 @@ const AddAddress = ({ initialData, onSave }) => {
     );
 
     const [errors, setErrors] = useState({});
-
+    const { getToken } = useContext(StoreContext);
 
 
 
@@ -58,7 +60,7 @@ const AddAddress = ({ initialData, onSave }) => {
         if (!validate()) return;
 
         try {
-            const token = localStorage.getItem("token");
+            const token = getToken();
             if (initialData && initialData.id) {
                 // Editing → PUT request
                 const res = await axios.put(
