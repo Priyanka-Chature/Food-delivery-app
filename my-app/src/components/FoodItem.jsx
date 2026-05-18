@@ -59,7 +59,7 @@ const FoodItem = ({ id, name, price, description, image , onClickCard}) => {
           {description}
         </p>
 
-        <p className="text-amber-600 text-lg sm:text-xl font-medium mt-auto pt-3">
+        <p className="text-amber-600 text-sm sm:text-lg font-medium mt-auto pt-3">
           ₹{price}
         </p>
       </div>
